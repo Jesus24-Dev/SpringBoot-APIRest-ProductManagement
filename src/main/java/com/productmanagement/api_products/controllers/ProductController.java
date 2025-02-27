@@ -25,40 +25,31 @@ public class ProductController {
     private ProductService productService;
     
     @GetMapping
-    public List<Product> getAllProducts(){
-        try {
-            return productService.getAllProducts();
-        } catch(Exception e) {
-            throw new RuntimeException("Error fetching products", e);
-        }       
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product [" + id + "] not found"));
+        Product product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 
     @PostMapping
-    public ResponseEntity<String> createProduct(@Valid @RequestBody Product product){
+    public ResponseEntity<String> createProduct(@Valid @RequestBody Product product) {
         productService.createProduct(product);
-        return ResponseEntity.ok("User created");           
+        return ResponseEntity.ok("Product created");
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProduct(@Valid @PathVariable Long id, @RequestBody Product productDetails){
-        Product product = productService.getProductById(id)
-            .orElseThrow(() -> new ProductNotFoundException("Product [" + id + "] not found"));
-        productService.updateProduct(product.getId(), productDetails);
-        return ResponseEntity.ok("User updated");             
+    public ResponseEntity<String> updateProduct(@Valid @PathVariable Long id, @RequestBody Product productDetails) {
+        productService.updateProduct(id, productDetails);
+        return ResponseEntity.ok("Product updated");
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long id){
-        Product product = productService.getProductById(id)
-            .orElseThrow(() -> new ProductNotFoundException("Product [" + id + "] not found"));
-        productService.deleteProduct(product.getId());
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted");
     }
 }
