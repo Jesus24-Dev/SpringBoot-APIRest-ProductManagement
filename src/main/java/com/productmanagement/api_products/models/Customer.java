@@ -5,6 +5,8 @@ import com.productmanagement.api_products.utils.CustomerRoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +36,19 @@ public class Customer {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     public Customer() {
         this.role = CustomerRoleEnum.Role.CUSTOMER; 
     }
 
-    public Customer(String name, String password) {
+    public Customer(String name, String password, List<Order> orders) {
         this.name = name;
         this.password = passwordEncoder.encode(password); 
         this.role = CustomerRoleEnum.Role.CUSTOMER;
+        this.orders = orders;
     }
 
     public String getName() {
