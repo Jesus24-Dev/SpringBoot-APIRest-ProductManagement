@@ -24,7 +24,7 @@ public class Product {
     private Double price;
     
     @ManyToOne
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "category_id")
     @NotBlank(message = "Category can't be empty")
     private Category category;
     
