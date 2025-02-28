@@ -23,6 +23,7 @@ public class Customer {
     @NotBlank(message = "Password can't be empty")
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private CustomerRoleEnum.Role role;
     
     @CreationTimestamp
