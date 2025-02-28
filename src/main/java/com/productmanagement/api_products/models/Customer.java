@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 public class Customer {
@@ -34,8 +32,6 @@ public class Customer {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
@@ -46,7 +42,7 @@ public class Customer {
 
     public Customer(String name, String password, List<Order> orders) {
         this.name = name;
-        this.password = passwordEncoder.encode(password); 
+        this.password = password; 
         this.role = CustomerRoleEnum.Role.CUSTOMER;
         this.orders = orders;
     }
@@ -64,7 +60,7 @@ public class Customer {
     }
 
     public void setPassword(String password) {
-        this.password = passwordEncoder.encode(password); 
+        this.password = password; 
     }
 
     public CustomerRoleEnum.Role getRole() {
