@@ -4,6 +4,9 @@ package com.productmanagement.api_products.models;
 import com.productmanagement.api_products.utils.CustomerRoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -21,6 +24,12 @@ public class Customer {
     private String password;
 
     private CustomerRoleEnum.Role role;
+    
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -57,5 +66,13 @@ public class Customer {
 
     public void setRole(CustomerRoleEnum.Role role) {
         this.role = role;
+    }
+    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
