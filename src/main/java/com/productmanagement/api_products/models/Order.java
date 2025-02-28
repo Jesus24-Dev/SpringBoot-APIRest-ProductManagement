@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -33,6 +35,9 @@ public class Order {
     @NotNull(message = "Product Status can't be empty")
     @Enumerated(EnumType.STRING)
     private ProductStatusEnum.ProductStatus productStatus;
+    
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -45,11 +50,12 @@ public class Order {
     }
 
     public Order(Customer customer, LocalDate orderDate, Double totalPrice, 
-                 ProductStatusEnum.ProductStatus productStatus) {
+                 ProductStatusEnum.ProductStatus productStatus, List<OrderProduct> orderProducts) {
         this.customer = customer;
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
         this.productStatus = productStatus != null ? productStatus : ProductStatusEnum.ProductStatus.PENDING;
+        this.orderProducts = orderProducts;
     }
 
     public Long getId() {
@@ -87,6 +93,14 @@ public class Order {
     public void setProductStatus(ProductStatusEnum.ProductStatus productStatus) {
         this.productStatus = productStatus;
     }
+
+    public List<OrderProduct> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProduct> orderProducts) {
+        this.orderProducts = orderProducts;
+    }      
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

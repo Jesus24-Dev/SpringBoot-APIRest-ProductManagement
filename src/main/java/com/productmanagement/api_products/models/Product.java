@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +30,9 @@ public class Product {
     @NotBlank(message = "Category can't be empty")
     private Category category;
     
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderProduct> orderProducts = new ArrayList<>();
+    
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -40,11 +45,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Double price, Category category, int count) {
+    public Product(String name, Double price, Category category, int count, List<OrderProduct> orderProducts) {
         this.name = name;
         this.price = price;
         this.category = category;
         this.count = count;
+        this.orderProducts = orderProducts;
     }
          
     public Long getId() {
@@ -83,4 +89,11 @@ public class Product {
         this.count = count;
     }
        
+    public List<OrderProduct> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProduct> orderProducts) {
+        this.orderProducts = orderProducts;
+    }  
 }
