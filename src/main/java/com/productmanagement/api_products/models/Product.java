@@ -4,6 +4,7 @@ package com.productmanagement.api_products.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class Product {
     
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @NotBlank(message = "Category can't be empty")
+    @NotNull(message = "Category can't be empty")
     private Category category;
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
