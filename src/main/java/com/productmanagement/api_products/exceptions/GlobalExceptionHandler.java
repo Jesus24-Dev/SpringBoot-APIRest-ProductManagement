@@ -30,6 +30,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
     
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<String> resourceNotFoundHandler(OrderNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> globalExceptionHandler(Exception ex) {
         return new ResponseEntity<>("Internal Server Error.", HttpStatus.INTERNAL_SERVER_ERROR);
