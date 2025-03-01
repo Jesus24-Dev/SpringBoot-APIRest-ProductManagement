@@ -29,7 +29,7 @@ public class CustomerService {
                 .orElseThrow(() -> new CustomerNotFoundException("Customer [" + id + "] not found"));
         
         existingCustomer.setName(customerDetails.getName());
-        existingCustomer.setName(customerDetails.getName());
+        existingCustomer.setPassword(customerDetails.getPassword());
         
         customerRepository.save(existingCustomer);
     }
