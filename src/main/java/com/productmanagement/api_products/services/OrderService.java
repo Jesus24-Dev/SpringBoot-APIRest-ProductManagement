@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    
+    @Autowired
+    private ProductService productService;
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -29,7 +33,6 @@ public class OrderService {
     public Order createOrder(Order order) {
         double totalPrice = calculateTotalPrice(order);
         order.setTotalPrice(totalPrice);
-
         return orderRepository.save(order);
     }
 
@@ -58,11 +61,13 @@ public class OrderService {
         orderRepository.delete(existingOrder);
     }
 
-    private double calculateTotalPrice(Order order) {
+   private double calculateTotalPrice(Order order) {
         double totalPrice = 0.0;
 
         for (OrderProduct orderProduct : order.getOrderProducts()) {
-            double productPrice = orderProduct.getProduct().getPrice();
+            Long productId = orderProduct.getProduct().getId();                       
+            double productPrice = productService.getProductById(productId).getPrice();
+            
             int quantity = orderProduct.getQuantity();
             totalPrice += productPrice * quantity;
         }

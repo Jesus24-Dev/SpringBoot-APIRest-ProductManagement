@@ -34,8 +34,6 @@ public class OrderProductService {
         OrderProduct existingOrderProduct = orderProductRepository.findById(id)
                 .orElseThrow(() -> new OrderProductNotFoundException("Order Products [" + id + "] not found"));
 
-        existingOrderProduct.setOrder(orderProductDetails.getOrder());
-        existingOrderProduct.setProduct(orderProductDetails.getProduct());
         existingOrderProduct.setQuantity(orderProductDetails.getQuantity());
         return orderProductRepository.save(existingOrderProduct);
     }
@@ -47,4 +45,5 @@ public class OrderProductService {
 
         orderProductRepository.delete(existingOrderProduct);
     }
+    
 }

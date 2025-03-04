@@ -21,7 +21,7 @@ public class OrderProduct {
     @JsonBackReference("order-order_product")
     private Order order;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     @NotNull(message = "Product id can't be empty")
     @JsonBackReference("product-order_product")
