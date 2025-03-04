@@ -1,6 +1,7 @@
 
 package com.productmanagement.api_products.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.productmanagement.api_products.utils.CustomerRoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ public class Customer {
 
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("customer-orders")
     private List<Order> orders = new ArrayList<>();
 
     public Customer() {
@@ -49,8 +51,12 @@ public class Customer {
 
     public Long getId() {
         return id;
-    }   
-         
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -64,7 +70,7 @@ public class Customer {
     }
 
     public void setPassword(String password) {
-        this.password = password; 
+        this.password = password;
     }
 
     public CustomerRoleEnum.Role getRole() {
@@ -75,19 +81,29 @@ public class Customer {
         this.role = role;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
-    }      
-    
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+
 }

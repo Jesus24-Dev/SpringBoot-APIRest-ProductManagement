@@ -18,13 +18,13 @@ public class OrderProduct {
     
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonBackReference
+    @JsonBackReference("order-order_product")
     private Order order;
     
     @ManyToOne
     @JoinColumn(name = "product_id")
     @NotNull(message = "Product id can't be empty")
-    @JsonBackReference
+    @JsonBackReference("product-order_product")
     private Product product;
     
     @Min(value = 0, message = "Count must be at least 0")

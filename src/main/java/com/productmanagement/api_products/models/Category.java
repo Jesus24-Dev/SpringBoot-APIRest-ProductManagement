@@ -22,7 +22,7 @@ public class Category {
     private String name;
     
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("category-products")
     private List<Product> products = new ArrayList<>();
     
     @CreationTimestamp

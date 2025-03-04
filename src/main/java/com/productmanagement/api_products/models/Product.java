@@ -31,11 +31,11 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     @NotNull(message = "Category can't be empty")
-    @JsonBackReference
+    @JsonBackReference("category-products")
     private Category category;
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("product-order_product")
     private List<OrderProduct> orderProducts = new ArrayList<>();
     
     @CreationTimestamp

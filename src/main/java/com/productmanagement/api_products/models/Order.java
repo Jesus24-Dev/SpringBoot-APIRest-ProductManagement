@@ -1,6 +1,7 @@
 
 package com.productmanagement.api_products.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.productmanagement.api_products.utils.ProductStatusEnum;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @NotNull(message = "Customer id can't be empty")
+    @JsonBackReference("customer-orders")
     private Customer customer;
 
     @PastOrPresent
@@ -39,7 +41,7 @@ public class Order {
     private ProductStatusEnum.ProductStatus productStatus;
     
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("order-order_product")
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @CreationTimestamp
