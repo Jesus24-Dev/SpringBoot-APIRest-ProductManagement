@@ -27,7 +27,6 @@ public class CustomerService {
 
     @Transactional
     public Customer createCustomer(Customer customer) {
-        customer.setRole(CustomerRoleEnum.Role.CUSTOMER);
         return customerRepository.save(customer);
     }
 
