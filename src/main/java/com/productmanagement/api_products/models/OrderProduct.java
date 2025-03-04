@@ -1,6 +1,7 @@
 
 package com.productmanagement.api_products.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,11 +18,13 @@ public class OrderProduct {
     
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Order order;
     
     @ManyToOne
     @JoinColumn(name = "product_id")
     @NotNull(message = "Product id can't be empty")
+    @JsonBackReference
     private Product product;
     
     @Min(value = 0, message = "Count must be at least 0")

@@ -1,6 +1,8 @@
 
 package com.productmanagement.api_products.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -29,9 +31,11 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     @NotNull(message = "Category can't be empty")
+    @JsonBackReference
     private Category category;
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<OrderProduct> orderProducts = new ArrayList<>();
     
     @CreationTimestamp

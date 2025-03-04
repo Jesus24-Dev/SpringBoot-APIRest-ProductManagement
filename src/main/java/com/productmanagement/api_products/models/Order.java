@@ -1,6 +1,7 @@
 
 package com.productmanagement.api_products.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.productmanagement.api_products.utils.ProductStatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -38,6 +39,7 @@ public class Order {
     private ProductStatusEnum.ProductStatus productStatus;
     
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @CreationTimestamp
