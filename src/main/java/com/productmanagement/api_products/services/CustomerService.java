@@ -4,6 +4,7 @@ package com.productmanagement.api_products.services;
 import com.productmanagement.api_products.exceptions.CustomerNotFoundException;
 import com.productmanagement.api_products.models.Customer;
 import com.productmanagement.api_products.repository.CustomerRepository;
+import com.productmanagement.api_products.utils.CustomerRoleEnum;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class CustomerService {
 
     @Transactional
     public Customer createCustomer(Customer customer) {
+        customer.setRole(CustomerRoleEnum.Role.CUSTOMER);
         return customerRepository.save(customer);
     }
 
