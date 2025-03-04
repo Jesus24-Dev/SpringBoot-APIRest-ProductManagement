@@ -23,7 +23,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Category>> getAllCategories(){
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
@@ -35,7 +35,7 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
     
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category){
         Category categoryCreated = categoryService.createCategory(category);
         return new ResponseEntity<>(categoryCreated, HttpStatus.CREATED);
