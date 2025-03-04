@@ -7,36 +7,44 @@ import com.productmanagement.api_products.repository.OrderProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderProductService {
-    
+
     @Autowired
     private OrderProductRepository orderProductRepository;
-    
-    public List<OrderProduct> getAllOrdersProducts(){
+
+    public List<OrderProduct> getAllOrdersProducts() {
         return orderProductRepository.findAll();
     }
-    public OrderProduct getOrderProductById(Long id){
+
+    public OrderProduct getOrderProductById(Long id) {
         return orderProductRepository.findById(id)
                 .orElseThrow(() -> new OrderProductNotFoundException("Order Products [" + id + "] not found"));
     }
-    public void createOrderProduct(OrderProduct orderProduct){
-        orderProductRepository.save(orderProduct);
+
+    @Transactional
+    public OrderProduct createOrderProduct(OrderProduct orderProduct) {
+        return orderProductRepository.save(orderProduct);
     }
-    public void updateOrderProduct(Long id, OrderProduct orderProductDetails){
+
+    @Transactional
+    public OrderProduct updateOrderProduct(Long id, OrderProduct orderProductDetails) {
         OrderProduct existingOrderProduct = orderProductRepository.findById(id)
                 .orElseThrow(() -> new OrderProductNotFoundException("Order Products [" + id + "] not found"));
-        
+
         existingOrderProduct.setOrder(orderProductDetails.getOrder());
         existingOrderProduct.setProduct(orderProductDetails.getProduct());
         existingOrderProduct.setQuantity(orderProductDetails.getQuantity());
+        return orderProductRepository.save(existingOrderProduct);
     }
-    public void deleteOrderProduct(Long id){
+
+    @Transactional
+    public void deleteOrderProduct(Long id) {
         OrderProduct existingOrderProduct = orderProductRepository.findById(id)
                 .orElseThrow(() -> new OrderProductNotFoundException("Order Products [" + id + "] not found"));
-        
+
         orderProductRepository.delete(existingOrderProduct);
     }
-    
 }

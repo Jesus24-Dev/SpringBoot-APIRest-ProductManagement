@@ -7,13 +7,14 @@ import com.productmanagement.api_products.repository.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
-    
+
     @Autowired
     private ProductRepository productRepository;
-    
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -23,24 +24,26 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Product [" + id + "] not found"));
     }
 
-    public void createProduct(Product product) {
-        productRepository.save(product);
+    @Transactional
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
     }
 
-    public void updateProduct(Long id, Product productDetails) {
+    @Transactional
+    public Product updateProduct(Long id, Product productDetails) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product [" + id + "] not found"));
-        
+
         existingProduct.setName(productDetails.getName());
         existingProduct.setPrice(productDetails.getPrice());
-        
-        productRepository.save(existingProduct);
+        return productRepository.save(existingProduct);
     }
 
+    @Transactional
     public void deleteProduct(Long id) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product [" + id + "] not found"));
-        
+
         productRepository.delete(existingProduct);
     }
 }
