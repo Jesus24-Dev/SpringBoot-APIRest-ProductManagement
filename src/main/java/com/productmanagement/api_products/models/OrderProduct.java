@@ -27,9 +27,6 @@ public class OrderProduct {
     @Min(value = 0, message = "Count must be at least 0")
     private int quantity;
     
-    @Min(value = 0, message = "Total price must be at least 0")
-    private Double totalPrice;
-    
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -39,11 +36,10 @@ public class OrderProduct {
     public OrderProduct() {
     }
 
-    public OrderProduct(Order order, Product product, int quantity, Double totalPrice) {
+    public OrderProduct(Order order, Product product, int quantity) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
-        this.totalPrice = totalPrice;
     }
 
     public Long getId() {
@@ -72,14 +68,6 @@ public class OrderProduct {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
     }
     
     public LocalDateTime getCreatedAt() {

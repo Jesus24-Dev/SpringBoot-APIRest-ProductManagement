@@ -31,7 +31,6 @@ public class OrderProductService {
         existingOrderProduct.setOrder(orderProductDetails.getOrder());
         existingOrderProduct.setProduct(orderProductDetails.getProduct());
         existingOrderProduct.setQuantity(orderProductDetails.getQuantity());
-        existingOrderProduct.setTotalPrice(orderProductDetails.getTotalPrice());
     }
     public void deleteOrderProduct(Long id){
         OrderProduct existingOrderProduct = orderProductRepository.findById(id)
