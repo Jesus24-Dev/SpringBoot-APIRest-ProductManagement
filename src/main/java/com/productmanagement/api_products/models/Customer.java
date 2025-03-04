@@ -47,6 +47,10 @@ public class Customer {
         this.orders = orders;
     }
 
+    public Long getId() {
+        return id;
+    }   
+         
     public String getName() {
         return name;
     }
@@ -70,6 +74,14 @@ public class Customer {
     public void setRole(CustomerRoleEnum.Role role) {
         this.role = role;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }      
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
