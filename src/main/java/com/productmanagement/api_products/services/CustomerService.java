@@ -7,36 +7,43 @@ import com.productmanagement.api_products.repository.CustomerRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomerService {
-    
+
     @Autowired
     private CustomerRepository customerRepository;
-    
-    public List<Customer> getAllCustomer(){
+
+    public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
-    public Customer getCustomerById(Long id){
+
+    public Customer getCustomerById(Long id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer [" + id + "] not found"));
     }
-    public void createCustomer(Customer customer){
-        customerRepository.save(customer);
+
+    @Transactional
+    public Customer createCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
-    public void updateCustomer(Long id, Customer customerDetails){
+
+    @Transactional
+    public Customer updateCustomer(Long id, Customer customerDetails) {
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer [" + id + "] not found"));
-        
+
         existingCustomer.setName(customerDetails.getName());
         existingCustomer.setPassword(customerDetails.getPassword());
-        
-        customerRepository.save(existingCustomer);
+        return customerRepository.save(existingCustomer);
     }
-    public void deleteCustomer(Long id){
+
+    @Transactional
+    public void deleteCustomer(Long id) {
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer [" + id + "] not found"));
-        
+
         customerRepository.delete(existingCustomer);
     }
 }
