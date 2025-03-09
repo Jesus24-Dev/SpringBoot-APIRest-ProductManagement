@@ -41,10 +41,7 @@ public class OrderService {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order [" + id + "] not found"));
 
-        existingOrder.setCustomer(orderDetails.getCustomer());
-        existingOrder.setOrderDate(orderDetails.getOrderDate());
         existingOrder.setProductStatus(orderDetails.getProductStatus());
-
         existingOrder.getOrderProducts().clear();
         existingOrder.getOrderProducts().addAll(orderDetails.getOrderProducts());
 
