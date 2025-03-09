@@ -1,6 +1,7 @@
 
 package com.productmanagement.api_products.controllers;
 
+import com.productmanagement.api_products.dtos.OrderDTO;
 import com.productmanagement.api_products.models.Order;
 import com.productmanagement.api_products.services.OrderService;
 import jakarta.validation.Valid;
@@ -31,9 +32,9 @@ public class OrderController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
         Order order = orderService.getOrderById(id);
-        return ResponseEntity.ok(order);
+        return ResponseEntity.ok(new OrderDTO(order));
     }
 
     @PostMapping

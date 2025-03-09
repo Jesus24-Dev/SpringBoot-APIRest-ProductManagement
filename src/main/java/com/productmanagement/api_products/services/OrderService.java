@@ -1,5 +1,6 @@
 package com.productmanagement.api_products.services;
 
+import com.productmanagement.api_products.dtos.OrderDTO;
 import com.productmanagement.api_products.exceptions.OrderNotFoundException;
 import com.productmanagement.api_products.models.Order;
 import com.productmanagement.api_products.models.OrderProduct;
@@ -31,7 +32,8 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(Order order) {
-        double totalPrice = calculateTotalPrice(order);
+        OrderDTO orderDTO = new OrderDTO(order);
+        double totalPrice = calculateTotalPrice(orderDTO);
         order.setTotalPrice(totalPrice);
         return orderRepository.save(order);
     }
@@ -45,7 +47,9 @@ public class OrderService {
         existingOrder.getOrderProducts().clear();
         existingOrder.getOrderProducts().addAll(orderDetails.getOrderProducts());
 
-        double totalPrice = calculateTotalPrice(existingOrder);
+        
+        OrderDTO orderDTO = new OrderDTO(existingOrder);
+        double totalPrice = calculateTotalPrice(orderDTO);
         existingOrder.setTotalPrice(totalPrice);
 
         return orderRepository.save(existingOrder);
@@ -58,17 +62,10 @@ public class OrderService {
         orderRepository.delete(existingOrder);
     }
 
-   private double calculateTotalPrice(Order order) {
-        double totalPrice = 0.0;
-
-        for (OrderProduct orderProduct : order.getOrderProducts()) {
-            Long productId = orderProduct.getProduct().getId();                       
-            double productPrice = productService.getProductById(productId).getPrice();
-            
-            int quantity = orderProduct.getQuantity();
-            totalPrice += productPrice * quantity;
-        }
-
-        return totalPrice;
+   private double calculateTotalPrice(OrderDTO orderDTO) {
+    return orderDTO.getOrderProducts().stream()
+            .mapToDouble(op -> op.getProductPrice() * op.getQuantity()) // Usamos los datos del DTO
+            .sum();
     }
+
 }
