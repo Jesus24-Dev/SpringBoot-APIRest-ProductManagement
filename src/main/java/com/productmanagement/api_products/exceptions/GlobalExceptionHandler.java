@@ -35,6 +35,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
     
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<String> insufficientStock(InsufficientStockException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> globalExceptionHandler(Exception ex) {
         return new ResponseEntity<>("Internal Server Error.", HttpStatus.INTERNAL_SERVER_ERROR);
