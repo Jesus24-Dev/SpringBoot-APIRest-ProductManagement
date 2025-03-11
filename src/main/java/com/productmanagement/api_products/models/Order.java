@@ -52,13 +52,14 @@ public class Order {
 
     public Order() {
         this.productStatus = ProductStatusEnum.ProductStatus.PENDING;
+        this.totalPrice = 0d;
     }
 
-    public Order(Customer customer, LocalDate orderDate, Double totalPrice, 
+    public Order(Customer customer, LocalDate orderDate,
                  ProductStatusEnum.ProductStatus productStatus, List<OrderProduct> orderProducts) {
         this.customer = customer;
         this.orderDate = orderDate;
-        this.totalPrice = totalPrice;
+        this.totalPrice = 0d;
         this.productStatus = productStatus != null ? productStatus : ProductStatusEnum.ProductStatus.PENDING;
         this.orderProducts = orderProducts;
     }
