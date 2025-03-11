@@ -1,16 +1,19 @@
 package com.productmanagement.api_products.services;
 
 import com.productmanagement.api_products.dtos.OrderDTO;
+import com.productmanagement.api_products.dtos.OrderProductDTO;
 import com.productmanagement.api_products.exceptions.OrderNotFoundException;
 import com.productmanagement.api_products.models.Order;
 import com.productmanagement.api_products.models.OrderProduct;
+import com.productmanagement.api_products.models.Product;
 import com.productmanagement.api_products.repository.OrderRepository;
+import com.productmanagement.api_products.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class OrderService {
@@ -19,7 +22,7 @@ public class OrderService {
     private OrderRepository orderRepository;
     
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -35,6 +38,18 @@ public class OrderService {
         OrderDTO orderDTO = new OrderDTO(order);
         double totalPrice = calculateTotalPrice(orderDTO);
         order.setTotalPrice(totalPrice);
+        
+        for (OrderProductDTO orderProduct : orderDTO.getOrderProducts()) {
+            Product product = productRepository.findById(orderProduct.getProductId())
+                .orElseThrow(() -> new OrderNotFoundException("Product [" + orderProduct.getProductId() + "] not found"));
+            
+            if (product.getCount() < orderProduct.getQuantity()) {
+                throw new IllegalArgumentException("Insufficient stock for the product: " + product.getName());
+            }
+
+            product.setCount(product.getCount() - orderProduct.getQuantity());
+            productRepository.save(product);
+        }
         return orderRepository.save(order);
     }
 
@@ -63,9 +78,17 @@ public class OrderService {
     }
 
    private double calculateTotalPrice(OrderDTO orderDTO) {
-    return orderDTO.getOrderProducts().stream()
-            .mapToDouble(op -> op.getProductPrice() * op.getQuantity()) // Usamos los datos del DTO
-            .sum();
+       
+       double totalPrice = 0D;
+       
+        for (OrderProductDTO orderProduct : orderDTO.getOrderProducts()) {
+            Product product = productRepository.findById(orderProduct.getProductId())
+               .orElseThrow(() -> new OrderNotFoundException("Product [" + orderProduct.getProductId() + "] not found"));
+        
+            totalPrice += orderProduct.getQuantity() * product.getPrice();
+        }
+        
+        return totalPrice;
     }
 
 }
