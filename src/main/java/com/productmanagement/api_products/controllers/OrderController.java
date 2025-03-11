@@ -6,6 +6,7 @@ import com.productmanagement.api_products.models.Order;
 import com.productmanagement.api_products.services.OrderService;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,14 @@ public class OrderController {
     private OrderService orderService;
     
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+
+        List<OrderDTO> orderDTOs = orders.stream()
+                .map(OrderDTO::new) 
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(orderDTOs);
     }
     
     @GetMapping("/{id}")
@@ -38,15 +44,15 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order) {      
+    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody Order order) {      
         Order createdOrder = orderService.createOrder(order);
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+        return new ResponseEntity<>(new OrderDTO(createdOrder), HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@Valid @PathVariable Long id, @RequestBody Order orderDetails) {
+    public ResponseEntity<OrderDTO> updateOrder(@Valid @PathVariable Long id, @RequestBody Order orderDetails) {
         Order updatedOrder = orderService.updateOrder(id, orderDetails);
-        return ResponseEntity.ok(updatedOrder);
+        return ResponseEntity.ok(new OrderDTO(updatedOrder));
     }
     
     @DeleteMapping("/{id}")
