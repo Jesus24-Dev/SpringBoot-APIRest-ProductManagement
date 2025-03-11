@@ -58,5 +58,10 @@ public class OrderProductDTO {
         this.productPrice = productPrice;
     }
 
+    @Override
+    public String toString() {
+        return "OrderProductDTO{" + "id=" + id + ", quantity=" + quantity + ", productId=" + productId + ", productName=" + productName + ", productPrice=" + productPrice + '}';
+    }
+
     
 }
