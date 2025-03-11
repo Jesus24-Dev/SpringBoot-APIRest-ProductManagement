@@ -2,6 +2,7 @@ package com.productmanagement.api_products.services;
 
 import com.productmanagement.api_products.dtos.OrderDTO;
 import com.productmanagement.api_products.dtos.OrderProductDTO;
+import com.productmanagement.api_products.exceptions.InsufficientStockException;
 import com.productmanagement.api_products.exceptions.OrderNotFoundException;
 import com.productmanagement.api_products.models.Order;
 import com.productmanagement.api_products.models.OrderProduct;
@@ -44,7 +45,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Product [" + orderProduct.getProductId() + "] not found"));
             
             if (product.getCount() < orderProduct.getQuantity()) {
-                throw new IllegalArgumentException("Insufficient stock for the product: " + product.getName());
+                throw new InsufficientStockException("Insufficient stock for the product: " + product.getName());
             }
 
             product.setCount(product.getCount() - orderProduct.getQuantity());
