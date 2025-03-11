@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 
 public class OrderDTO {
     private Long id;
+    private Long customerId;
     private LocalDate orderDate;
     private double totalPrice;
     private List<OrderProductDTO> orderProducts;
 
     public OrderDTO(Order order) {
         this.id = order.getId();
+        this.customerId = order.getCustomer().getId();
         this.orderDate = order.getOrderDate();
         this.totalPrice = order.getTotalPrice();
         this.orderProducts = order.getOrderProducts()
@@ -29,6 +31,14 @@ public class OrderDTO {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }      
 
     public LocalDate getOrderDate() {
         return orderDate;
