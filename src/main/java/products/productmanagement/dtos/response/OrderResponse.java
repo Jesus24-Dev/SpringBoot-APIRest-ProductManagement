@@ -2,6 +2,9 @@
 package products.productmanagement.dtos.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import products.productmanagement.enums.OrderStatus;
+import products.productmanagement.models.Order;
 
 public class OrderResponse {
     private final Long id;
@@ -9,10 +12,9 @@ public class OrderResponse {
     private final OrderStatus status;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-    private final UserMinResponse user; // DTO reducido para el usuario
-    private final List<ProductMinResponse> products; // DTO reducido para productos
+    private final UserMinResponse user; 
+    private final List<ProductMinResponse> products; 
 
-    // Constructor desde la entidad Order
     public OrderResponse(Order order) {
         this.id = order.getId();
         this.orderDate = order.getOrderDate();
