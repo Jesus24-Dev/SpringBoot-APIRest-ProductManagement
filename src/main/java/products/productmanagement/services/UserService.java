@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import products.productmanagement.dtos.request.UserRequest;
 import products.productmanagement.dtos.response.UserResponse;
@@ -15,12 +16,16 @@ import products.productmanagement.repository.UserRepository;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse createUser(UserRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        user.setPassword(encodedPassword);
         user.setRole(request.getRole()); 
 
         User savedUser = userRepository.save(user);
