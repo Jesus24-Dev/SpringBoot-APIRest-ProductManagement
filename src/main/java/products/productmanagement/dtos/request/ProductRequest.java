@@ -5,8 +5,8 @@ public class ProductRequest {
     
     private String name;
     private String description;
-    private float price;
-    private int stock;
+    private Float price;
+    private Integer stock;
     private Long categoryId;
 
     public String getName() {
@@ -25,7 +25,7 @@ public class ProductRequest {
         this.description = description;
     }
 
-    public float getPrice() {
+    public Float getPrice() {
         return price;
     }
 
@@ -33,7 +33,7 @@ public class ProductRequest {
         this.price = price;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
