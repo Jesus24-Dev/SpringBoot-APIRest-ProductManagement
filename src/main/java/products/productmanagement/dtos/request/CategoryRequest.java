@@ -1,7 +1,11 @@
 
 package products.productmanagement.dtos.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CategoryRequest {
+    
+    @NotBlank(message = "The Category Name is Required")
     private String name;
 
     public String getName() {

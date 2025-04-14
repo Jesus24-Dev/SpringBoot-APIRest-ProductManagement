@@ -1,12 +1,24 @@
 
 package products.productmanagement.dtos.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class ProductRequest {
     
+    @NotBlank(message = "The product name is required")
     private String name;
+    
     private String description;
+    
+    @Positive(message = "The price need to be greather than zero")
     private Float price;
+    
+    @Positive(message = "The stock need to be greather than zero")
     private Integer stock;
+    
+    @NotNull(message = "The category ID is required")
     private Long categoryId;
 
     public String getName() {
