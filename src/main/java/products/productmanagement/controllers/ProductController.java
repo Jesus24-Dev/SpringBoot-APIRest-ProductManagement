@@ -1,6 +1,7 @@
 
 package products.productmanagement.controllers;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(
-        @RequestBody ProductRequest request
+        @Valid @RequestBody ProductRequest request
     ) {
         ProductResponse response = productService.createProduct(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -52,7 +53,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(
         @PathVariable Long id,
-        @RequestBody ProductRequest request
+        @Valid @RequestBody ProductRequest request
     ) {
         ProductResponse response = productService.updateProduct(id, request);
         return ResponseEntity.ok(response);

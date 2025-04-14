@@ -1,6 +1,7 @@
 
 package products.productmanagement.controllers;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(
-        @RequestBody OrderRequest request
+        @Valid @RequestBody OrderRequest request
     ) {
         OrderResponse response = orderService.createOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -54,7 +55,7 @@ public class OrderController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<OrderResponse> updateOrderStatus(
         @PathVariable Long id,
-        @RequestParam OrderStatus status
+        @Valid @RequestParam OrderStatus status
     ) {
         OrderResponse response = orderService.updateOrderStatus(id, status);
         return ResponseEntity.ok(response);

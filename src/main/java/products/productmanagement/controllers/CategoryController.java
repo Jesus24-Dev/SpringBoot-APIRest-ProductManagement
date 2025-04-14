@@ -1,5 +1,6 @@
 package products.productmanagement.controllers;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(
-        @RequestBody CategoryRequest request
+        @Valid @RequestBody CategoryRequest request
     ) {
         CategoryResponse response = categoryService.createCategory(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -51,7 +52,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(
         @PathVariable Long id,
-        @RequestBody CategoryRequest request
+        @Valid @RequestBody CategoryRequest request
     ) {
         CategoryResponse response = categoryService.updateCategory(id, request);
         return ResponseEntity.ok(response);
