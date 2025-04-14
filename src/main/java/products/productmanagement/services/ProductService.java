@@ -1,10 +1,12 @@
-package products.productmanagement.services;
+   package products.productmanagement.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import products.productmanagement.dtos.request.ProductRequest;
+import products.productmanagement.dtos.response.ProductResponse;
 import products.productmanagement.models.Category;
 import products.productmanagement.models.Product;
 import products.productmanagement.repository.CategoryRepository;
@@ -14,54 +16,63 @@ import products.productmanagement.repository.ProductRepository;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-    
     @Autowired
     private CategoryRepository categoryRepository;
-    
+
     @Transactional
-    public Product createProduct(Product product){
-        if (product.getCategory() == null || product.getCategory().getId() == null) {
-            throw new EntityNotFoundException("Category ID is required");
-        }
-        Category category = categoryRepository.findById(product.getCategory().getId())
-            .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        product.setCategory(category);
-        return productRepository.save(product);
-    }
-    
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
-    }
-    
-    public Product getProductById(Long id){
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        
-        return product;
-    }
-    
-    @Transactional
-    public Product updateProduct(Long id, Product product){
-        Product productFounded = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        Category category = categoryRepository.findById(product.getCategory().getId())
+    public ProductResponse createProduct(ProductRequest request) {
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setStock(request.getStock());
+
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        
-        productFounded.setName(product.getName());
-        productFounded.setPrice(product.getPrice());
-        productFounded.setStock(product.getStock());
-        productFounded.setDescription(product.getDescription());
-        productFounded.setCategory(category);
-        
-        return productRepository.save(productFounded);
+            product.setCategory(category);
+        }
+
+        Product savedProduct = productRepository.save(product);
+        return new ProductResponse(savedProduct);
     }
-    
-    @Transactional
-    public void deleteProduct(Long id){
+
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+            .map(ProductResponse::new)
+            .toList();
+    }
+
+    public ProductResponse getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        return new ProductResponse(product);
+    }
+
+    @Transactional
+    public ProductResponse updateProduct(Long id, ProductRequest request) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        if (request.getName() != null) product.setName(request.getName());
+        if (request.getDescription() != null) product.setDescription(request.getDescription());
+        if (request.getPrice() != null) product.setPrice(request.getPrice());
+        if (request.getStock() != null) product.setStock(request.getStock());
         
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+            product.setCategory(category);
+        }
+
+        Product updatedProduct = productRepository.save(product);
+        return new ProductResponse(updatedProduct);
+    }
+
+    @Transactional
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         productRepository.delete(product);
     }
-    
 }

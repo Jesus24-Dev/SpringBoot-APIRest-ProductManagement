@@ -6,50 +6,63 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import products.productmanagement.dtos.request.CategoryRequest;
+import products.productmanagement.dtos.response.CategoryResponse;
 import products.productmanagement.models.Category;
 import products.productmanagement.repository.CategoryRepository;
+import products.productmanagement.repository.ProductRepository;
 
 @Service
 public class CategoryService {
-  
     @Autowired
     private CategoryRepository categoryRepository;
-    
+    @Autowired
+    private ProductRepository productRepository; 
+
     @Transactional
-    public Category createCategory(Category category){
-        if (category.getName() == null || category.getName().trim().isEmpty()) {
+    public CategoryResponse createCategory(CategoryRequest request) {
+        if (request.getName() == null || request.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Category name cannot be empty");
         }
-        return categoryRepository.save(category);
+
+        Category category = new Category();
+        category.setName(request.getName());
+
+        Category savedCategory = categoryRepository.save(category);
+        return new CategoryResponse(savedCategory);
     }
-    
-    public Category getCategoryById(Long id){
+
+    public CategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        
-        return category;
+            .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        return new CategoryResponse(category);
     }
-    
-    public List<Category> getAllCategories(){
-        return categoryRepository.findAll();
+
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll().stream()
+            .map(CategoryResponse::new)
+            .toList();
     }
-    
+
     @Transactional
-    public Category updateCategory(Long id, Category category){
-        Category existingCategory = getCategoryById(id);
-        if (category.getName() != null && !category.getName().trim().isEmpty()) {
-            existingCategory.setName(category.getName());
+    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
+        Category existingCategory = categoryRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        if (request.getName() != null && !request.getName().trim().isEmpty()) {
+            existingCategory.setName(request.getName());
         }
-        return categoryRepository.save(existingCategory);
+
+        Category updatedCategory = categoryRepository.save(existingCategory);
+        return new CategoryResponse(updatedCategory);
     }
-    
+
     @Transactional
-    public void deleteCategory(Long id){
-        Category categoryFounded = getCategoryById(id);
-        if (!categoryFounded.getProducts().isEmpty()) { 
-            throw new IllegalStateException("Cannot delete category with associated products");
-        }
-        
-        categoryRepository.delete(categoryFounded);
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        categoryRepository.delete(category);
     }
 }
+
