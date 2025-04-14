@@ -26,4 +26,34 @@ public class OrderResponse {
                 .map(ProductMinResponse::new)
                 .toList();
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public UserMinResponse getUser() {
+        return user;
+    }
+
+    public List<ProductMinResponse> getProducts() {
+        return products;
+    }
+    
+    
 }
